@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ClassroomLog {
+  id Int @id @default(autoincrement())
+  action String
+  updatedAt DateTime
+  @@map("classroom_log")
+}
+
+model Manager {
+  id Int @id @default(autoincrement())
+  name String 
+  surname String
+  email String @unique
+  password String 
+  @@map("tb_manager")
+}
+
+model Teacher {
+  id Int @id @default(autoincrement())
+  name String 
+  surname String
+  email String @unique
+  code  String
+  TeacherClassroom TeacherClassroom[]
+  @@map("tb_teacher")
+}
+
+model Classroom {
+  id Int @id @default(autoincrement())
+  isAvailable Boolean @default(true)
+  name String @unique
+  capacity Int
+  floor Int
+  TeacherClassroom TeacherClassroom[]
+}
+
+model TeacherClassroom {
+  id Int @id @default(autoincrement())
+  teacher Teacher? @relation(fields: [teacherId], references: [id])
+  teacherId Int?
+  classroom Classroom @relation(fields: [classroomId], references: [id])
+  classroomId Int
+}

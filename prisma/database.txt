@@ -1,0 +1,31 @@
+create database db_almoxarifado;
+
+use almoxarifado;
+
+insert into tb_teacher values(1,"Nicolas","Marques","nicolas@email.com","abc1234");
+
+insert into teacherclassroom values(1,1,1);
+
+DELIMITER //
+CREATE TRIGGER tgr_log_classroom 
+AFTER UPDATE ON teacherclassroom
+FOR EACH ROW 
+BEGIN
+    IF NEW.teacherId IS NULL THEN
+        INSERT INTO ClassroomLog (action, teacherId, classroomId, updatedAt) 
+        VALUES (CONCAT("Professor ", OLD.teacherId, " devolveu a sala ", OLD.classroomId), OLD.teacherId, OLD.classroomId, NOW());
+    ELSE
+        INSERT INTO ClassroomLog (action, teacherId, classroomId, updatedAt) 
+        VALUES (CONCAT("Professor ", NEW.teacherId, " agora está na sala ", NEW.classroomId), NEW.teacherId, NEW.classroomId, NOW());
+    END IF;
+END // // delimiter ;
+
+select * from classroomlog;
+
+drop trigger tgr_log_classroom;
+		
+
+
+show tables;
+
+select * from tb_teacher;
