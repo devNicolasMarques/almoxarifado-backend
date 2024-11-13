@@ -1,6 +1,6 @@
 
 import { prisma } from '../lib/prisma.ts';
-import { DeleteClassroomDTO, registerClassroomDTO } from '../dtos/managerDto.ts';
+import { DeleteClassroomDTO, registerClassroomDTO, updateClassroomDTO } from '../dtos/managerDto.ts';
 
 
 export class ManagerService {
@@ -60,6 +60,56 @@ export class ManagerService {
 
         }
 
+    }
+
+    async updateClassroom(data: updateClassroomDTO) {
+        const { id, classroom, capacity, floor } = data;
+        console.log(id)
+        const classroomExist = await prisma.classroom.findUnique({
+            where: {
+                id: id
+            }
+        });
+
+        if (!classroomExist) {
+            throw new Error('Esta sala de aula não existe');
+        }
+
+        try {
+            await prisma.classroom.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    name: classroom,
+                    capacity: Number(capacity),
+                    floor: floor
+                }
+            });
+
+            const updatedClassroom = await prisma.classroom.findUnique({
+                where: {
+                    name: classroom
+                },
+                select: {
+                    id: true
+                }
+            });
+
+            if (updatedClassroom) {
+                await prisma.teacherClassroom.updateMany({
+                    where: {
+                        classroomId: updatedClassroom.id
+                    },
+                    data: {
+                        teacherId: null
+                    }
+                });
+            }
+        } catch (err) {
+            console.log(err)
+            
+        }
     }
 
 

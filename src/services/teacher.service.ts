@@ -1,6 +1,6 @@
 
 import { prisma } from '../lib/prisma.ts';
-import { teacherDTO } from '../dtos/teacherDto.ts';
+import { teacherDeleteDTO, teacherDTO, teacherUpdateDTO } from '../dtos/teacherDto.ts';
 
 export class TeacherService {
 
@@ -27,5 +27,32 @@ export class TeacherService {
             }
         });
     }
+
+    async updateTeacher(data: teacherUpdateDTO) {
+        const { id, name, surname, email, code } = data;  
+        return await prisma.teacher.update({
+            where: {
+                id: id
+            },
+            data: {
+                name: name,
+                surname: surname,
+                email: email,
+                code: code
+            }
+        });
+    }
+
+    async deleteTeacher(data: teacherDeleteDTO) {
+        const { id } = data;  
+        console.log(id)
+        return await prisma.teacher.delete({
+            where: {
+                id: id
+            },
+        });
+    }
+
+
 
 }

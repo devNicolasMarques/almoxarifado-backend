@@ -8,6 +8,6 @@ app.use(cors());
 
 initRoutes(app);
 
-const port = process.env.PORT || 8080;
+const port = 8080;
 
-app.listen(port, () => console.log(`Acesse: ${port}`));
+app.listen(port, () => console.log(`Acesse: http://localhost:${port}/`));

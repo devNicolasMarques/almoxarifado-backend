@@ -6,6 +6,6 @@ const route = Router();
 
 route.get('/', ClassroomController.getClassroomDisponibility);
 route.post('/borrow', validateBorrowClassroom, ClassroomController.borrowClassroom);
-route.post('/give-back', validateGiveBackClassroom, ClassroomController.giveBackClassroom);
+route.post('/giveback', validateGiveBackClassroom, ClassroomController.giveBackClassroom);
 
 export default route;

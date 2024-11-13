@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import 'dotenv/config'
 import { ManagerService } from "../services/manager.service.ts";
-import { DeleteClassroomDTO, registerClassroomDTO } from "../dtos/managerDto.ts";
+import { DeleteClassroomDTO, registerClassroomDTO, updateClassroomDTO } from "../dtos/managerDto.ts";
 
 const managerService = new ManagerService();
 
@@ -22,6 +22,16 @@ class ManagerController {
         try {
             await managerService.registerClassroom(data)
             return res.status(201).json({ message: "Sala de aula registrada com sucesso!"})
+        } catch (error) {
+            res.status(500).json(error);
+        }
+    }
+
+    static async updateClassroom(req: Request, res: Response): Promise<any> {
+        const data: updateClassroomDTO= req.body;
+        try {
+            await managerService.updateClassroom(data)
+            return res.status(201).json({ message: "Sala de aula atualizada com sucesso!"})
         } catch (error) {
             res.status(500).json(error);
         }

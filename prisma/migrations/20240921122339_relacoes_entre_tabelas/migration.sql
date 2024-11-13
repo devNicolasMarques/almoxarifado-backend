@@ -1,13 +1,4 @@
 -- CreateTable
-CREATE TABLE `classroom_log` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `action` VARCHAR(191) NOT NULL,
-    `updatedAt` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `tb_manager` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
@@ -34,26 +25,24 @@ CREATE TABLE `tb_teacher` (
 -- CreateTable
 CREATE TABLE `Classroom` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `isAvailable` BOOLEAN NOT NULL DEFAULT true,
     `name` VARCHAR(191) NOT NULL,
     `capacity` INTEGER NOT NULL,
     `floor` INTEGER NOT NULL,
 
-    UNIQUE INDEX `Classroom_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `TeacherClassroom` (
+CREATE TABLE `emprestimoSala` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `teacherId` INTEGER NULL,
+    `teacherId` INTEGER NOT NULL,
     `classroomId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `TeacherClassroom` ADD CONSTRAINT `TeacherClassroom_teacherId_fkey` FOREIGN KEY (`teacherId`) REFERENCES `tb_teacher`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `emprestimoSala` ADD CONSTRAINT `emprestimoSala_teacherId_fkey` FOREIGN KEY (`teacherId`) REFERENCES `tb_teacher`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `TeacherClassroom` ADD CONSTRAINT `TeacherClassroom_classroomId_fkey` FOREIGN KEY (`classroomId`) REFERENCES `Classroom`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `emprestimoSala` ADD CONSTRAINT `emprestimoSala_classroomId_fkey` FOREIGN KEY (`classroomId`) REFERENCES `Classroom`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

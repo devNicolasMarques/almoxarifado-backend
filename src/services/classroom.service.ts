@@ -8,7 +8,7 @@ export class ClassroomService {
       select: {
         teacherId: false,
         classroomId: false,
-        id: false,
+        id: true,
         classroom: {
           select: {
             name: true,
@@ -30,7 +30,7 @@ export class ClassroomService {
   async borrowClassroom(data: BorrowClassroomDTO) {
     const { classroom, teacherName, teacherSurname } = data;
     const now = new Date();
-    now.setHours(now.getHours() - 3);
+    now.setHours(now.getHours());
 
     const getTeacher = await prisma.teacher.findFirst({
       where: {
@@ -93,7 +93,7 @@ export class ClassroomService {
   async giveBackClassroom(data: GiveBackClassroomDTO) {
     const { classroom } = data;
     const now = new Date();
-    now.setHours(now.getHours() - 3);
+    now.setHours(now.getHours());
 
     const getClassroom = await prisma.classroom.findUnique({
       where: {
