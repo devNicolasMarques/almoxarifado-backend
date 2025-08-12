@@ -9,49 +9,48 @@ import jwt from 'jsonwebtoken'
 
 export class AuthService {
 
-    async register(data: RegisterDTO) {
-        const { name, surname, email, password }: RegisterDTO = data;
+   async register(data: RegisterDTO) {
+    const { username, position, password }: RegisterDTO = data;
 
-        const userExist = await prisma.manager.findUnique(
-            {
-                where: {
-                    email: email
-                }
-            }
-        );
+    const userExist = await prisma.user.findUnique({
+        where: { username }
+    });
 
-        const passwordCrypt = CryptoJS.AES.encrypt(password, process.env.SECRET as string).toString();
-
-        if (!userExist) {
-            return await prisma.manager.create({
-                data: {
-                    name: name,
-                    surname: surname,
-                    email: email,
-                    password: passwordCrypt,
-                }
-            });
-        }
+    if (userExist) {
+        throw new Error("Usuário já existe");
     }
+
+    const passwordCrypt = CryptoJS.AES.encrypt(password, process.env.SECRET as string).toString();
+
+    console.log(passwordCrypt)
+
+    return await prisma.user.create({
+        data: {
+            username,
+            position,
+            password: passwordCrypt,
+        }
+    });
+}
 
     async login(data: LoginDTO) {
 
-        const { email, password } = data;
+        const { username, password } = data;
 
-        const manager = await prisma.manager.findUnique(
+        const user = await prisma.user.findUnique(
             {
                 where: {
-                    email: email
+                    username: username
                 },
                 select: {
                     id: true,
-                    email: true,
+                    username: true,
                     password: true
                 }
             }
         );
-        if (manager) {
-            var bytes = CryptoJS.AES.decrypt(manager.password, process.env.SECRET as string);
+        if (user) {
+            var bytes = CryptoJS.AES.decrypt(user.password, process.env.SECRET as string);
             const passwordDecrypted = bytes.toString(CryptoJS.enc.Utf8);
 
             if (password !== passwordDecrypted) {
@@ -62,7 +61,7 @@ export class AuthService {
 
             const token = jwt.sign(
                 {
-                    id: manager.id
+                    id: user.id
                 },
                 secret as string,
                 {

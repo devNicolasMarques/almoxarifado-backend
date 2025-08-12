@@ -8,11 +8,11 @@ class AuthController {
     static async register(req: Request, res: Response): Promise<any> {
         const data: RegisterDTO = req.body;
         try {
-            const teacherClassroom = await authService.register(data);
+            await authService.register(data);
             return res.status(201).json({message: "Registrado com sucesso!"})
 
         } catch (error) {
-            res.status(500).json(error);
+            return res.status(500).json(error);
         }
     }
 

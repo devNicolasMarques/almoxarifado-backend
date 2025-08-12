@@ -19,6 +19,7 @@ model User {
   password String
   position String
   created_at DateTime @default(now())
+  reservation Reservation[]
 }
 
 model Teacher {
@@ -31,11 +32,20 @@ model Teacher {
   Reservation Reservation[]
 }
 
+model Course {
+  id Int @id @default(autoincrement())
+  name String
+  workload Int
+  class Class[]
+}
+
 model Class {
   id Int @id @default(autoincrement())
   code String
-  course String
+  courseId Int
+  course Course @relation(fields: [courseId], references: [id])
   description String 
+  Reservation Reservation[]
 }
 
 model Classroom {
@@ -52,6 +62,10 @@ model Reservation {
   teacherId Int?
   classroom Classroom @relation(fields: [classroomId], references: [id])
   classroomId Int
+  class Class @relation(fields: [classId], references: [id])
+  classId Int
+  user User @relation(fields: [userId], references: [id])
+  userId Int
   uc String
   date DateTime
   description String

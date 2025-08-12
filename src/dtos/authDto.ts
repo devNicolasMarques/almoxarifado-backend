@@ -1,12 +1,11 @@
 export interface RegisterDTO {
-    name: string;
-    surname: string;
-    email: string;
+    username: string;
     password: string;
+    position: string;
     confirmPassword: string;
 }
 
 export interface LoginDTO {
-    email: string;
+    username: string;
     password: string;
 }
